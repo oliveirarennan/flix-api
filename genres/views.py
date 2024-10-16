@@ -5,6 +5,7 @@ from django.shortcuts import get_object_or_404
 from genres.models import Genre
 from rest_framework import generics
 from genres.serializers import GenreSerializer
+from rest_framework.permissions import IsAuthenticated
 
 # Create your views here.
 
@@ -24,6 +25,7 @@ from genres.serializers import GenreSerializer
 #     },
 #     status=201,)
 class GenreCreateListView(generics.ListCreateAPIView):
+  permission_classes = (IsAuthenticated,)
   queryset = Genre.objects.all()
   serializer_class = GenreSerializer
   
@@ -52,5 +54,6 @@ class GenreCreateListView(generics.ListCreateAPIView):
 #     )
 
 class GenreRetrieveUpdateDestroyView(generics.RetrieveUpdateDestroyAPIView):
+  permission_classes = (IsAuthenticated,)
   queryset = Genre.objects.all()
   serializer_class = GenreSerializer
