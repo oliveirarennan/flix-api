@@ -1,20 +1,30 @@
 from django.db.models import Count, Avg
 from rest_framework import generics, views, response, status
 from movies.models import Movie
-from movies.serializes import MovieModelSerializer, MovieSerializer
+from movies.serializes import MovieModelSerializer, MovieSerializer, MovieListDetailSerializer
 from rest_framework.permissions import IsAuthenticated
 from app.permissions import GlobalDefaultPermission
 from reviews.models import Review
 
+
 class MovieCreateListView(generics.ListCreateAPIView):
   permission_classes = (IsAuthenticated, GlobalDefaultPermission,)
   queryset = Movie.objects.all()
-  serializer_class = MovieModelSerializer
+
+  def get_serializer_class(self):
+      if self.request.method == 'GET':
+        return MovieListDetailSerializer
+      return MovieModelSerializer
 
 class MovieRetrieveUpdateDestroyView(generics.RetrieveUpdateDestroyAPIView):
   permission_classes = (IsAuthenticated, GlobalDefaultPermission,)
   queryset = Movie.objects.all()
-  serializer_class = MovieModelSerializer
+  
+  def get_serializer_class(self):
+      if self.request.method == 'GET':
+        return MovieListDetailSerializer
+      return MovieModelSerializer
+
 
 class MovieStatsView(views.APIView):
   permission_classes = (IsAuthenticated, GlobalDefaultPermission,)
